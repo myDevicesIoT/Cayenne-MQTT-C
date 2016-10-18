@@ -1,5 +1,5 @@
-# Cayenne MQTT Embedded C Library
-The Cayenne MQTT Embedded C Library provides functions to easily connect to the Cayenne IoT project builder.
+# Cayenne MQTT C Library
+The Cayenne MQTT C Library provides functions to easily connect to the Cayenne IoT project builder.
 
 This library bundles the [Eclipse Paho MQTT C/C++ client](https://github.com/eclipse/paho.mqtt.embedded-c).
 
