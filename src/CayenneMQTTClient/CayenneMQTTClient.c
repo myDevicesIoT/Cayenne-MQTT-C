@@ -59,7 +59,7 @@ void MQTTMessageArrived(MessageData* md, void* userData)
 * @param[out] client The initialized client object
 * @param[out] network The network connection
 * @param[in] username Cayenne username
-* @param[in] password Password
+* @param[in] password Cayenne password
 * @param[in] clientID Cayennne client ID
 * @param[in] defaultHandler Default MQTT message handler, can be NULL
 */
