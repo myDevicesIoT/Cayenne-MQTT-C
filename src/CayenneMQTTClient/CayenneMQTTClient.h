@@ -18,6 +18,11 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #ifndef _CAYENNEMQTTCLIENT_h
 #define _CAYENNEMQTTCLIENT_h
 
+#include "MQTTClient.h"
+#include "../CayenneUtils/CayenneDefines.h"
+#include "../CayenneUtils/CayenneUtils.h"
+#include "../CayenneUtils/CayenneDataArray.h"
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -32,11 +37,6 @@ extern "C" {
 #define DLLImport
 #define DLLExport
 #endif
-
-#include "MQTTClient.h"
-#include "../CayenneUtils/CayenneDefines.h"
-#include "../CayenneUtils/CayenneUtils.h"
-#include "../CayenneUtils/CayenneDataArray.h"
 
 	/**
 	* Cayenne message data passed to message handler functions.

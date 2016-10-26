@@ -24,7 +24,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 // C++ version of the data array. This is defined here so it requires no source file.
 
-namespace Cayenne
+namespace CayenneMQTT
 {
 	/**
 	* @class DataArray
@@ -329,7 +329,7 @@ namespace Cayenne
 	};
 }
 
-typedef Cayenne::DataArray<> CayenneDataArray;
+typedef CayenneMQTT::DataArray<> CayenneDataArray;
 
 #else
 
