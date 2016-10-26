@@ -58,6 +58,7 @@ extern "C" {
 	{
 		MQTTClient mqttClient;
 		const char* username;
+		const char* password;
 		const char* clientID;
 		unsigned char sendbuf[CAYENNE_MAX_MESSAGE_SIZE + 1];
 		unsigned char readbuf[CAYENNE_MAX_MESSAGE_SIZE + 1];
@@ -73,22 +74,22 @@ extern "C" {
 	} CayenneMQTTClient;
 
 	/**
-	* Create an Cayenne MQTT client object.
+	* Create an Cayenne MQTT client object
 	* @param[out] client The initialized client object
-
+	* @param[out] network The network connection
+	* @param[in] username Cayenne username
+	* @param[in] password Password
+	* @param[in] clientID Cayennne client ID
 	* @param[in] defaultHandler Default MQTT message handler, can be NULL
 	*/
-	DLLExport void CayenneMQTTClientInit(CayenneMQTTClient* client, Network* network, CayenneMessageHandler defaultHandler);
+	DLLExport void CayenneMQTTClientInit(CayenneMQTTClient* client, Network* network, const char* username, const char* password, const char* clientID, CayenneMessageHandler defaultHandler);
 
 	/**
 	* Connect to the Cayenne server.
 	* @param[in] client The client object
-	* @param[in] username Cayenne username
-	* @param[in] clientID Cayennne client ID
-	* @param[in] password Password
 	* @return success code
 	*/
-	DLLExport int CayenneMQTTConnect(CayenneMQTTClient* client, const char* username, const char* clientID, const char* password);
+	DLLExport int CayenneMQTTConnect(CayenneMQTTClient* client);
 
 	/**
 	* Send data to Cayenne.

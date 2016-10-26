@@ -57,9 +57,13 @@ void MQTTMessageArrived(MessageData* md, void* userData)
 /**
 * Create an Cayenne MQTT client object
 * @param[out] client The initialized client object
+* @param[out] network The network connection
+* @param[in] username Cayenne username
+* @param[in] password Password
+* @param[in] clientID Cayennne client ID
 * @param[in] defaultHandler Default MQTT message handler, can be NULL
 */
-void CayenneMQTTClientInit(CayenneMQTTClient* client, Network* network, CayenneMessageHandler defaultHandler)
+void CayenneMQTTClientInit(CayenneMQTTClient* client, Network* network, const char* username, const char* password, const char* clientID, CayenneMessageHandler defaultHandler)
 {
 	int i;
 	MQTTClientInit(&client->mqttClient, network, 30000, client->sendbuf, CAYENNE_MAX_MESSAGE_SIZE, client->readbuf, CAYENNE_MAX_MESSAGE_SIZE);
@@ -73,25 +77,23 @@ void CayenneMQTTClientInit(CayenneMQTTClient* client, Network* network, CayenneM
 	client->defaultMessageHandler = defaultHandler;
 	client->mqttClient.defaultMessageHandler = MQTTMessageArrived;
 	client->mqttClient.userData = client;
+	client->username = username;
+	client->password = password;
+	client->clientID = clientID;
 }
 
 /**
 * Connect to the Cayenne server
 * @param[in] client The client object
-* @param[in] username Cayenne username
-* @param[in] clientID Cayennne client ID
-* @param[in] password Password
 * @return success code
 */
-int CayenneMQTTConnect(CayenneMQTTClient* client, const char* username, const char* clientID, const char* password)
+int CayenneMQTTConnect(CayenneMQTTClient* client)
 {
 	MQTTPacket_connectData data = MQTTPacket_connectData_initializer;
 	data.MQTTVersion = 3;
-	client->clientID = clientID;
-	client->username = username;
 	data.clientID.cstring = (char*)client->clientID;
 	data.username.cstring = (char*)client->username;
-	data.password.cstring = (char*)password;
+	data.password.cstring = (char*)client->password;
 	return MQTTConnect(&client->mqttClient, &data);
 }
 

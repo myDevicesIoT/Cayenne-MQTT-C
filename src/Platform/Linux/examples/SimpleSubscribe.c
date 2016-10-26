@@ -8,8 +8,8 @@
 
 // Cayenne authentication info. This should be obtained from the Cayenne Dashboard.
 char* username = "MQTT_USERNAME";
-char* clientID = "CLIENT_ID";
 char* password = "MQTT_PASSWORD";
+char* clientID = "CLIENT_ID";
 
 Network network;
 CayenneMQTTClient mqttClient;
@@ -42,7 +42,7 @@ int connectClient(void)
 		return error;
 	}
 
-	if ((error = CayenneMQTTConnect(&mqttClient, username, clientID, password)) != MQTT_SUCCESS) {
+	if ((error = CayenneMQTTConnect(&mqttClient)) != MQTT_SUCCESS) {
 		NetworkDisconnect(&network);
 		return error;
 	}
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 	NetworkInit(&network);
 
 	// Initialize the Cayenne client.
-	CayenneMQTTClientInit(&mqttClient, &network, messageArrived);
+	CayenneMQTTClientInit(&mqttClient, &network, username, password, clientID, messageArrived);
 
 	// Connect to Cayenne.
 	if (connectClient() == CAYENNE_SUCCESS) {
