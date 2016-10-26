@@ -71,10 +71,18 @@ void messageArrived(CayenneMessageData* message)
 	// Add code to process the message. Here we just ouput the message data.
 	outputMessage(message);
 
-	// If this is a command message we publish a response. Here we are just sending a default 'OK' response.
-	// An error response should be sent if there are issues processing the message.
-	if (message->topic == COMMAND_TOPIC && (error = CayenneMQTTPublishResponse(&mqttClient, message->clientID, message->channel, message->id, NULL)) != CAYENNE_SUCCESS) {
-		printf("Response failure, error: %d\n", error);
+	if (message->topic == COMMAND_TOPIC) {
+		// If this is a command message we publish a response to show we recieved it. Here we are just sending a default 'OK' response.
+		// An error response should be sent if there are issues processing the message.
+		if ((error = CayenneMQTTPublishResponse(&mqttClient, message->clientID, message->channel, message->id, NULL)) != CAYENNE_SUCCESS) {
+			printf("Response failure, error: %d\n", error);
+		}
+
+		// Send the updated state for the channel so it is reflected in the Cayenne dashboard. If a command is successfully processed
+		// the updated state will usually just be the value received in the command message.
+		if ((error = CayenneMQTTPublishData(&mqttClient, message->clientID, DATA_TOPIC, message->channel, NULL, NULL, message->values[0].value)) != CAYENNE_SUCCESS) {
+			printf("Publish state failure, error: %d\n", error);
+		}
 	}
 }
 
