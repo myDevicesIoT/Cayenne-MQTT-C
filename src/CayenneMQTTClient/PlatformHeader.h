@@ -35,7 +35,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 //     * @param[out] buffer Buffer that receives the data
 //     * @param[in] len Buffer length
 //     * @param[in] timeout_ms Timeout for the read operation, in milliseconds
-//     * @return 1 for success, any other value for error
+//     * @return Number of bytes read, or a negative value if there was an error
 //     */
 //     int(*mqttread) (struct Network* network, unsigned char* buffer, int len, int timeout_ms);
 //
@@ -45,7 +45,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 //     * @param[in] buffer Buffer that contains data to write
 //     * @param[in] len Number of bytes to write
 //     * @param[in] timeout_ms Timeout for the write operation, in milliseconds
-//     * @return Number of bytes written on success, a negative value for error
+//     * @return Number of bytes written, or a negative value if there was an error
 //     */
 //     int(*mqttwrite) (struct Network* network, unsigned char* buffer, int len, int timeout_ms);
 // } Network;

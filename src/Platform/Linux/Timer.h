@@ -21,7 +21,7 @@
 #include <stdio.h>
 
  /**
- * Countdown timer struct
+ * Countdown timer struct.
  */
 typedef struct Timer
 {
@@ -29,7 +29,7 @@ typedef struct Timer
 } Timer;
 
 /**
-* Initialize countdown timer
+* Initialize countdown timer.
 * @param[in] timer Pointer to Timer struct
 */
 void TimerInit(Timer* timer);

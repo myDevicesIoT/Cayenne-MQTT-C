@@ -56,7 +56,7 @@ typedef struct Network
 	* @param[out] buffer Buffer that receives the data
 	* @param[in] len Buffer length
 	* @param[in] timeout_ms Timeout for the read operation, in milliseconds
-	* @return 1 for success, any other value for error
+	* @return Number of bytes read, or a negative value if there was an error
 	*/
 	int(*mqttread) (struct Network* network, unsigned char* buffer, int len, int timeout_ms);
 	
@@ -66,7 +66,7 @@ typedef struct Network
 	* @param[in] buffer Buffer that contains data to write
 	* @param[in] len Number of bytes to write
 	* @param[in] timeout_ms Timeout for the write operation, in milliseconds
-	* @return Number of bytes written on success, a negative value for error
+	* @return Number of bytes written, or a negative value if there was an error
 	*/
 	int(*mqttwrite) (struct Network* network, unsigned char* buffer, int len, int timeout_ms);
 } Network;
@@ -77,7 +77,7 @@ typedef struct Network
 * @param[out] buffer Buffer that receives the data
 * @param[in] len Buffer length
 * @param[in] timeout_ms Timeout for the read operation, in milliseconds
-* @return 1 for success, any other value for error
+* @return Number of bytes read, or a negative value if there was an error
 */
 int linux_read(struct Network* network, unsigned char* buffer, int len, int timeout_ms);
 
@@ -87,7 +87,7 @@ int linux_read(struct Network* network, unsigned char* buffer, int len, int time
 * @param[in] buffer Buffer that contains data to write
 * @param[in] len Number of bytes to write
 * @param[in] timeout_ms Timeout for the write operation, in milliseconds
-* @return Number of bytes written on success, a negative value for error
+* @return Number of bytes written, or a negative value if there was an error
 */
 int linux_write(struct Network* network, unsigned char* buffer, int len, int timeout_ms);
 
@@ -98,7 +98,7 @@ int linux_write(struct Network* network, unsigned char* buffer, int len, int tim
 DLLExport void NetworkInit(Network* network);
 
 /**
-* Connect to address.
+* Connect to the specified address.
 * @param[in] network Pointer to the Network struct
 * @param[in] addr Destination address
 * @param[in] port Destination port
@@ -107,13 +107,13 @@ DLLExport void NetworkInit(Network* network);
 DLLExport int NetworkConnect(Network* network, char* addr, int port);
 
 /**
-* Close connection.
+* Close the connection.
 * @param[in] network Pointer to the Network struct
 */
 DLLExport void NetworkDisconnect(Network* network);
 
 /**
-* Get connection state.
+* Get the connection state.
 * @param[in] network Pointer to the Network struct
 * @return 1 if connected, 0 if not
 */
