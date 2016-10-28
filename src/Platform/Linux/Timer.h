@@ -20,15 +20,46 @@
 #include <sys/time.h>
 #include <stdio.h>
 
+ /**
+ * Countdown timer struct
+ */
 typedef struct Timer
 {
-	struct timeval end_time;
+	struct timeval end_time; /**< Countdown end time. */
 } Timer;
 
-void TimerInit(Timer*);
-char TimerIsExpired(Timer*);
-void TimerCountdownMS(Timer*, unsigned int);
-void TimerCountdown(Timer*, unsigned int);
-int TimerLeftMS(Timer*);
+/**
+* Initialize countdown timer
+* @param[in] timer Pointer to Timer struct
+*/
+void TimerInit(Timer* timer);
+
+/**
+* The countdown timer has expired.
+* @param[in] timer Pointer to Timer struct
+* @return 1 if countdown has expired, 0 otherwise.
+*/
+char TimerIsExpired(Timer* timer);
+
+/**
+* Start countdown in milliseconds.
+* @param[in] timer Pointer to Timer struct
+* @param[in] timeout Number of milliseconds to count down.
+*/
+void TimerCountdownMS(Timer* timer, unsigned int timeout);
+
+/**
+* Start countdown in seconds.
+* @param[in] timer Pointer to Timer struct
+* @param[in] timeout Number of seconds to count down.
+*/
+void TimerCountdown(Timer* timer, unsigned int timeout);
+
+/**
+* Get the number of milliseconds left in countdown.
+* @param[in] timer Pointer to Timer struct
+* @return Number of milliseconds left.
+*/
+int TimerLeftMS(Timer* timer);
 
 #endif

@@ -42,20 +42,81 @@
 #include <stdlib.h>
 #include <string.h>
 
+ /**
+ * Network struct for reading from and writing to a network connection.
+ */
 typedef struct Network
 {
-	int my_socket;
-	int connected;
-	int(*mqttread) (struct Network*, unsigned char*, int, int);
-	int(*mqttwrite) (struct Network*, unsigned char*, int, int);
+	int my_socket;  /**< The connection socket. */
+	int connected;  /**< Connection state, 1 if connected, 0 if not. */
+	
+	/**
+	* Read data from the network.
+	* @param[in] network Pointer to the Network struct
+	* @param[out] buffer Buffer that receives the data
+	* @param[in] len Buffer length
+	* @param[in] timeout_ms Timeout for the read operation, in milliseconds
+	* @return 1 for success, any other value for error
+	*/
+	int(*mqttread) (struct Network* network, unsigned char* buffer, int len, int timeout_ms);
+	
+	/**
+	* Write data to the network.
+	* @param[in] network Pointer to the Network struct
+	* @param[in] buffer Buffer that contains data to write
+	* @param[in] len Number of bytes to write
+	* @param[in] timeout_ms Timeout for the write operation, in milliseconds
+	* @return Number of bytes written on success, a negative value for error
+	*/
+	int(*mqttwrite) (struct Network* network, unsigned char* buffer, int len, int timeout_ms);
 } Network;
 
-int linux_read(Network*, unsigned char*, int, int);
-int linux_write(Network*, unsigned char*, int, int);
+/**
+* Read data from the network.
+* @param[in] network Pointer to the Network struct
+* @param[out] buffer Buffer that receives the data
+* @param[in] len Buffer length
+* @param[in] timeout_ms Timeout for the read operation, in milliseconds
+* @return 1 for success, any other value for error
+*/
+int linux_read(struct Network* network, unsigned char* buffer, int len, int timeout_ms);
 
-DLLExport void NetworkInit(Network*);
-DLLExport int NetworkConnect(Network*, char*, int);
-DLLExport void NetworkDisconnect(Network*);
-DLLExport int NetworkConnected(Network*);
+/**
+* Write data to the network.
+* @param[in] network Pointer to the Network struct
+* @param[in] buffer Buffer that contains data to write
+* @param[in] len Number of bytes to write
+* @param[in] timeout_ms Timeout for the write operation, in milliseconds
+* @return Number of bytes written on success, a negative value for error
+*/
+int linux_write(struct Network* network, unsigned char* buffer, int len, int timeout_ms);
+
+/**
+* Initialize Network struct
+* @param[in] network Pointer to the Network struct
+*/
+DLLExport void NetworkInit(Network* network);
+
+/**
+* Connect to address.
+* @param[in] network Pointer to the Network struct
+* @param[in] addr Destination address
+* @param[in] port Destination port
+* @return 0 if successfully connected, an error code otherwise
+*/
+DLLExport int NetworkConnect(Network* network, char* addr, int port);
+
+/**
+* Close connection.
+* @param[in] network Pointer to the Network struct
+*/
+DLLExport void NetworkDisconnect(Network* network);
+
+/**
+* Get connection state.
+* @param[in] network Pointer to the Network struct
+* @return 1 if connected, 0 if not
+*/
+DLLExport int NetworkConnected(Network* network);
 
 #endif

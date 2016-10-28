@@ -18,10 +18,81 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #ifndef PLATFORMHEADER_H_
 #define PLATFORMHEADER_H_
 
-//Set the platform specific header file containing the Timer & Network definitions here.
+//Set the platform specific header file containing the Network and Timer definitions here.
 #if defined(__linux__)
 	#include "MQTTLinux.h"
 #endif
+
+// The following Network and Timer code should be defined in the platform specific header.
+//
+// Interface for the platform specific Network struct used by MQTTClient. Your platform specific Network struct must provide the same functions.
+//
+// typedef struct Network
+// {
+//     /**
+//     * Read data from the network.
+//     * @param[in] network Pointer to the Network struct
+//     * @param[out] buffer Buffer that receives the data
+//     * @param[in] len Buffer length
+//     * @param[in] timeout_ms Timeout for the read operation, in milliseconds
+//     * @return 1 for success, any other value for error
+//     */
+//     int(*mqttread) (struct Network* network, unsigned char* buffer, int len, int timeout_ms);
+//
+//     /**
+//     * Write data to the network.
+//     * @param[in] network Pointer to the Network struct
+//     * @param[in] buffer Buffer that contains data to write
+//     * @param[in] len Number of bytes to write
+//     * @param[in] timeout_ms Timeout for the write operation, in milliseconds
+//     * @return Number of bytes written on success, a negative value for error
+//     */
+//     int(*mqttwrite) (struct Network* network, unsigned char* buffer, int len, int timeout_ms);
+// } Network;
+//
+//
+// A Timer struct should be defined in the platform specific header.
+//
+// typedef struct Timer
+// {
+// } Timer;
+//
+// The following functions should be provided for using the Timer.
+//
+// /**
+// * Initialize countdown timer
+// * @param[in] timer Pointer to Timer struct
+// */
+// void TimerInit(Timer* timer);
+//
+// /**
+// * The countdown timer has expired.
+// * @param[in] timer Pointer to Timer struct
+// * @return 1 if countdown has expired, 0 otherwise.
+// */
+// char TimerIsExpired(Timer* timer);
+//
+// /**
+// * Start countdown in milliseconds.
+// * @param[in] timer Pointer to Timer struct
+// * @param[in] timeout Number of milliseconds to count down.
+// */
+// void TimerCountdownMS(Timer* timer, unsigned int timeout);
+//
+// /**
+// * Start countdown in seconds.
+// * @param[in] timer Pointer to Timer struct
+// * @param[in] timeout Number of seconds to count down.
+// */
+// void TimerCountdown(Timer* timer, unsigned int timeout);
+//
+// /**
+// * Get the number of milliseconds left in countdown.
+// * @param[in] timer Pointer to Timer struct
+// * @return Number of milliseconds left.
+// */
+// int TimerLeftMS(Timer* timer);
+
 
 #define MAX_MESSAGE_HANDLERS 0  // Set MQTTClient handlers to 0 since Cayenne uses its own handlers.
 

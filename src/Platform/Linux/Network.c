@@ -17,7 +17,7 @@
 #include "Network.h"
 
 
-int linux_read(Network* n, unsigned char* buffer, int len, int timeout_ms)
+int linux_read(Network* network, unsigned char* buffer, int len, int timeout_ms)
 {
 	struct timeval interval = {timeout_ms / 1000, (timeout_ms % 1000) * 1000};
 	//Make sure the timeout isn't zero, otherwise it can block forever.
@@ -27,12 +27,12 @@ int linux_read(Network* n, unsigned char* buffer, int len, int timeout_ms)
 		interval.tv_usec = 100;
 	}
 
-	setsockopt(n->my_socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&interval, sizeof(struct timeval));
+	setsockopt(network->my_socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&interval, sizeof(struct timeval));
 
 	int bytes = 0;
-	while (bytes < len && n->connected)
+	while (bytes < len && network->connected)
 	{
-		int rc = recv(n->my_socket, &buffer[bytes], (size_t)(len - bytes), 0);
+		int rc = recv(network->my_socket, &buffer[bytes], (size_t)(len - bytes), 0);
 		if (rc == -1)
 		{
 			if (errno != ENOTCONN && errno != ECONNRESET)
@@ -42,7 +42,7 @@ int linux_read(Network* n, unsigned char* buffer, int len, int timeout_ms)
 			}
 		}
 		else if ((rc == 0 && len != 0) || errno == ENOTCONN || errno == ECONNRESET || errno == EPIPE)
-			n->connected = 0;
+			network->connected = 0;
 		else
 			bytes += rc;
 	}
@@ -51,7 +51,7 @@ int linux_read(Network* n, unsigned char* buffer, int len, int timeout_ms)
 }
 
 
-int linux_write(Network* n, unsigned char* buffer, int len, int timeout_ms)
+int linux_write(Network* network, unsigned char* buffer, int len, int timeout_ms)
 {
 	struct timeval interval = { timeout_ms / 1000, (timeout_ms % 1000) * 1000 };
 	//Make sure the timeout isn't zero, otherwise it can block forever.
@@ -61,25 +61,25 @@ int linux_write(Network* n, unsigned char* buffer, int len, int timeout_ms)
 		interval.tv_usec = 100;
 	}
 
-	setsockopt(n->my_socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&interval,sizeof(struct timeval));
-	int	rc = write(n->my_socket, buffer, len);
+	setsockopt(network->my_socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&interval,sizeof(struct timeval));
+	int	rc = write(network->my_socket, buffer, len);
 	if (rc == -1 && (errno == ENOTCONN || errno == ECONNRESET || errno == EPIPE))
-		n->connected = 0;
+		network->connected = 0;
 
 	return rc;
 }
 
 
-void NetworkInit(Network* n)
+void NetworkInit(Network* network)
 {
-	n->my_socket = 0;
-	n->connected = 0;
-	n->mqttread = linux_read;
-	n->mqttwrite = linux_write;
+	network->my_socket = 0;
+	network->connected = 0;
+	network->mqttread = linux_read;
+	network->mqttwrite = linux_write;
 }
 
 
-int NetworkConnect(Network* n, char* addr, int port)
+int NetworkConnect(Network* network, char* addr, int port)
 {
 	int type = SOCK_STREAM;
 	struct sockaddr_in address;
@@ -117,10 +117,10 @@ int NetworkConnect(Network* n, char* addr, int port)
 
 	if (rc == 0)
 	{
-		n->my_socket = socket(family, type, 0);
-		if (n->my_socket != -1) {
-			if ((rc = connect(n->my_socket, (struct sockaddr*)&address, sizeof(address))) == 0)
-				n->connected = 1;
+		network->my_socket = socket(family, type, 0);
+		if (network->my_socket != -1) {
+			if ((rc = connect(network->my_socket, (struct sockaddr*)&address, sizeof(address))) == 0)
+				network->connected = 1;
 		}
 	}
 
@@ -128,14 +128,14 @@ int NetworkConnect(Network* n, char* addr, int port)
 }
 
 
-void NetworkDisconnect(Network* n)
+void NetworkDisconnect(Network* network)
 {
-	close(n->my_socket);
-	n->connected = 0;
+	close(network->my_socket);
+	network->connected = 0;
 }
 
 
-int NetworkConnected(Network* n)
+int NetworkConnected(Network* network)
 {
-	return n->connected;
+	return network->connected;
 }
