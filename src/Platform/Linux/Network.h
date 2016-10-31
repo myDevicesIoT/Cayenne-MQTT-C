@@ -42,9 +42,9 @@
 #include <stdlib.h>
 #include <string.h>
 
- /**
- * Network struct for reading from and writing to a network connection.
- */
+/**
+* Network struct for reading from and writing to a network connection.
+*/
 typedef struct Network
 {
 	int my_socket;  /**< The connection socket. */
