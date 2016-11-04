@@ -47,8 +47,8 @@ void loop(void)
 		CayenneMQTTYield(&mqttClient, 1000);
 
 		// Publish some example data every second. This should be changed to send your actual data to Cayenne.
-		CayenneMQTTPublishDataFloat(&mqttClient, NULL, DATA_TOPIC, 0, TEMPERATURE, CELSIUS, 30.5);
-		CayenneMQTTPublishDataInt(&mqttClient, NULL, DATA_TOPIC, 1, LUMINOSITY, LUX, 1000);
+		CayenneMQTTPublishDataFloat(&mqttClient, NULL, DATA_TOPIC, 0, TYPE_TEMPERATURE, UNIT_CELSIUS, 30.5);
+		CayenneMQTTPublishDataInt(&mqttClient, NULL, DATA_TOPIC, 1, TYPE_LUMINOSITY, UNIT_LUX, 1000);
 	}
 }
 

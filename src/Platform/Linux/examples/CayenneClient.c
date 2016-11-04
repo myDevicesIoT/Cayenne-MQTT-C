@@ -154,13 +154,13 @@ void loop(void)
 		// Publish some example data every few seconds. This should be changed to send your actual data to Cayenne.
 		if (TimerIsExpired(&timer)) {
 			int error = 0;
-			if ((error = CayenneMQTTPublishDataFloat(&mqttClient, NULL, DATA_TOPIC, 0, TEMPERATURE, CELSIUS, 30.5)) != CAYENNE_SUCCESS) {
+			if ((error = CayenneMQTTPublishDataFloat(&mqttClient, NULL, DATA_TOPIC, 0, TYPE_TEMPERATURE, UNIT_CELSIUS, 30.5)) != CAYENNE_SUCCESS) {
 				printf("Publish temperature failed, error: %d\n", error);
 			}
-			if ((error = CayenneMQTTPublishDataInt(&mqttClient, NULL, DATA_TOPIC, 1, LUMINOSITY, LUX, 1000)) != CAYENNE_SUCCESS) {
+			if ((error = CayenneMQTTPublishDataInt(&mqttClient, NULL, DATA_TOPIC, 1, TYPE_LUMINOSITY, UNIT_LUX, 1000)) != CAYENNE_SUCCESS) {
 				printf("Publish luminosity failed, error: %d\n", error);
 			}
-			if ((error = CayenneMQTTPublishDataInt(&mqttClient, NULL, DATA_TOPIC, 2, BAROMETRIC_PRESSURE, HECTOPASCAL, 800)) != CAYENNE_SUCCESS) {
+			if ((error = CayenneMQTTPublishDataInt(&mqttClient, NULL, DATA_TOPIC, 2, TYPE_BAROMETRIC_PRESSURE, UNIT_HECTOPASCAL, 800)) != CAYENNE_SUCCESS) {
 				printf("Publish barometric pressure failed, error: %d\n", error);
 			}
 			TimerCountdown(&timer, 5);
