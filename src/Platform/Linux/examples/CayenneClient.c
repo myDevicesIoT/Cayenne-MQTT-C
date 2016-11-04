@@ -74,7 +74,7 @@ void messageArrived(CayenneMessageData* message)
 	if (message->topic == COMMAND_TOPIC) {
 		// If this is a command message we publish a response to show we recieved it. Here we are just sending a default 'OK' response.
 		// An error response should be sent if there are issues processing the message.
-		if ((error = CayenneMQTTPublishResponse(&mqttClient, message->clientID, message->channel, message->id, NULL)) != CAYENNE_SUCCESS) {
+		if ((error = CayenneMQTTPublishResponse(&mqttClient, message->clientID, message->id, NULL)) != CAYENNE_SUCCESS) {
 			printf("Response failure, error: %d\n", error);
 		}
 

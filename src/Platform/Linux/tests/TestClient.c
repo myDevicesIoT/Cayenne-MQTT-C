@@ -175,10 +175,10 @@ void messageArrived(CayenneMessageData* message)
 		if ((message->channel == 0) || (message->channel == 1)) {
 			switch (message->channel) {
 			case 0:
-				rc = CayenneMQTTPublishResponse(&mqttClient, message->clientID, message->channel, message->id, "error message");
+				rc = CayenneMQTTPublishResponse(&mqttClient, message->clientID, message->id, "error message");
 				break;
 			case 1:
-				rc = CayenneMQTTPublishResponse(&mqttClient, message->clientID, message->channel, message->id, NULL);
+				rc = CayenneMQTTPublishResponse(&mqttClient, message->clientID, message->id, NULL);
 				break;
 			}
 			if(rc == CAYENNE_SUCCESS)
@@ -544,7 +544,7 @@ int main(int argc, char** argv)
 	testPublishLong(DATA_TOPIC, 0, 123, TYPE_PROXIMITY, UNIT_CENTIMETER, parseInfoPayload, NULL);
 	testPublishULong(DATA_TOPIC, 0, 123, TYPE_LUMINOSITY, UNIT_LUX, parseInfoPayload, NULL);
 	testPublishDouble(DATA_TOPIC, 0, 123.4, TYPE_BAROMETRIC_PRESSURE, UNIT_HECTOPASCAL, parseInfoPayload, NULL);
-	testPublishFloat(DATA_TOPIC, 0, 123.4, TYPE_ABSOLUTE_HUMIDITY, UNIT_PERCENT, parseInfoPayload, NULL);
+	testPublishFloat(DATA_TOPIC, 0, 99.9, TYPE_ABSOLUTE_HUMIDITY, UNIT_PERCENT, parseInfoPayload, NULL);
 	testDataArrayPublish(parseInfoPayload);
 	testPublish(SYS_MODEL_TOPIC, CAYENNE_NO_CHANNEL, "Model", NULL, NULL, parseInfoPayload, NULL);
 	testPublish(SYS_VERSION_TOPIC, CAYENNE_NO_CHANNEL, "1.0.0", NULL, NULL, parseInfoPayload, NULL);
