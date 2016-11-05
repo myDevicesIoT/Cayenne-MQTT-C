@@ -530,8 +530,8 @@ int main(int argc, char** argv)
 
 	printf("Test Publish\n");
 	checkMessages = true;
-	testPublish(COMMAND_TOPIC, 0, NULL, "1", "respond with ok", true, NULL);
-	testPublish(COMMAND_TOPIC, 1, NULL, "2", "respond with error", true, NULL);
+	testPublish(COMMAND_TOPIC, 0, NULL, "1", "respond with error", true, NULL);
+	testPublish(COMMAND_TOPIC, 1, NULL, "2", "respond with ok", true, NULL);
 	testPublish(COMMAND_TOPIC, 2, NULL, "1", "alternate clientID", true, clientID2);
 	testPublish(CONFIG_TOPIC, 0, "off", NULL, NULL, true, NULL);
 	testPublish(CONFIG_TOPIC, 1, "on", NULL, NULL, false, NULL);
