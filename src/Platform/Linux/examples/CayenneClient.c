@@ -132,6 +132,7 @@ void loop(void)
 {
 	Timer timer;
 	TimerInit(&timer);
+	//Start the countdown timer for publishing data every 5 seconds. Change the timeout parameter to publish at a different interval.
 	TimerCountdown(&timer, 5);
 
 	while (!finished) {
@@ -163,6 +164,7 @@ void loop(void)
 			if ((error = CayenneMQTTPublishDataInt(&mqttClient, NULL, DATA_TOPIC, 2, TYPE_BAROMETRIC_PRESSURE, UNIT_HECTOPASCAL, 800)) != CAYENNE_SUCCESS) {
 				printf("Publish barometric pressure failed, error: %d\n", error);
 			}
+			//Restart the countdown timer for publishing data every 5 seconds. Change the timeout parameter to publish at a different interval.
 			TimerCountdown(&timer, 5);
 		}
 	}
