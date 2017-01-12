@@ -81,7 +81,7 @@ typedef struct MQTTMessage
     unsigned char dup;
     unsigned short id;
     void *payload;
-    size_t payloadlen;
+    int payloadlen;
 } MQTTMessage;
 
 typedef struct MessageData
