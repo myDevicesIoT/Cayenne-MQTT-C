@@ -165,12 +165,20 @@ void loop(void)
 	}
 }
 
-///**
-//* Interrupt handler for processing program shutdown.
-//*/
-//void intHandler(int signum) {
-//	finished = true;
-//}
+/**
+* Control signal handler for processing program shutdown.
+* @param[in] dwCtrlType The type of control signal received by the handler.
+* @return TRUE if the control signal was handled.
+*/
+BOOL WINAPI HandlerRoutine(DWORD dwCtrlType)
+{
+	BOOL handled = FALSE;
+	if (dwCtrlType == CTRL_C_EVENT) {
+		finished = true;
+		handled = TRUE;
+	}
+	return handled;
+}
 
 /**
 * Main function.
@@ -179,14 +187,8 @@ void loop(void)
 */
 int main(int argc, char** argv)
 {
-	//// Set up handler so we can exit cleanly when Ctrl-C is pressed.
-	//struct sigaction action;
-	//memset(&action, 0, sizeof(struct sigaction));
-	//action.sa_handler = intHandler;
-	//sigaction(SIGINT, &action, NULL);
-	//// Ignore the SIGPIPE signal since the program will attempt to reconnect if there are socket errors.
-	//action.sa_handler = SIG_IGN;
-	//sigaction(SIGPIPE, &action, NULL);
+	// Set up handler so we can exit cleanly when Ctrl-C is pressed.
+	SetConsoleCtrlHandler(HandlerRoutine, TRUE);
 
 	// Initialize the network.
 	NetworkInit(&network);
@@ -211,6 +213,7 @@ int main(int argc, char** argv)
 	if (NetworkConnected(&network))
 		NetworkDisconnect(&network);
 
+	// Cleanup the network.
 	NetworkCleanup();
 
 	return 0;
