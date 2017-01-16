@@ -10,6 +10,8 @@ This library bundles the [Eclipse Paho MQTT C/C++ client](https://github.com/ecl
   - **MQTTCommon** - Common Paho MQTT C code used by both the C and C++ libraries.
   - **Platform** - Platform specific networking and timer code, as well as test and example applications.
     - **Linux** - Linux C networking and timer code, as well as test and example applications. Test and example files can be built using the makefile.
+    - **Windows** - Windows C networking and timer code, as well as test and example applications. Test and example files can be built using Visual Studio 2015.
+    
 
 ## Building Examples
 To build on Linux switch to the root folder and run:
