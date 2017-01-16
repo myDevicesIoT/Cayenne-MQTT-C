@@ -277,7 +277,7 @@ int CayenneMQTTPublishDataArray(CayenneMQTTClient* client, const char* clientID,
 		if (result == CAYENNE_SUCCESS) {
 			MQTTMessage message;
 			message.qos = QOS0;
-			message.retained = 1;
+			message.retained = (topic != COMMAND_TOPIC) ? 1 : 0;
 			message.dup = 0;
 			message.payload = (void*)payload;
 			message.payloadlen = size;
