@@ -331,7 +331,7 @@ int CayenneBuildTopic(char* topicName, size_t length, const char* username, cons
 * @return CAYENNE_SUCCESS if topic string was created, error code otherwise
 */
 int CayenneBuildDataPayload(char* payload, size_t* length, const char* type, const CayenneValuePair* values, size_t valueCount) {
-	int i;
+	size_t i;
 	size_t payloadLength = 0;
 	for (i = 0; i < valueCount; ++i) {
 		if (values[i].unit) {
@@ -487,7 +487,7 @@ int CayenneParseTopic(CayenneTopic* topic, unsigned int* channel, const char** c
 * @return CAYENNE_SUCCESS if topic string was created, error code otherwise
 */
 int CayenneParsePayload(CayenneValuePair* values, size_t* valuesSize, const char** type, const char** id, CayenneTopic topic, char* payload) {
-	int i;
+	size_t i;
 	if (!payload || !valuesSize || *valuesSize == 0)
 		return CAYENNE_FAILURE;
 

@@ -111,7 +111,7 @@ void getOptions(int argc, char** argv)
 */
 void outputMessage(CayenneMessageData* message)
 {
-	int i;
+	size_t i;
 	printf("topic=%d channel=%d", message->topic, message->channel);
 	if (message->clientID) {
 		printf(" clientID=%s", message->clientID);
@@ -138,7 +138,7 @@ void outputMessage(CayenneMessageData* message)
 */
 void checkMessage(CayenneMessageData* message)
 {
-	int i;
+	size_t i;
 	outputMessage(message);
 	messageMatched = true;
 	if (message->topic != testMessage.topic) {

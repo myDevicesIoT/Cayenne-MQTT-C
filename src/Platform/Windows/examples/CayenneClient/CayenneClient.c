@@ -25,7 +25,7 @@ bool finished = false;
 */
 void outputMessage(CayenneMessageData* message)
 {
-	int i;
+	size_t i;
 	switch (message->topic) {
 	case COMMAND_TOPIC:
 		printf("topic=Command");
