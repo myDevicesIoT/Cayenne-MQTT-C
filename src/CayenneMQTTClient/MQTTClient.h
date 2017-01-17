@@ -33,8 +33,8 @@
   #define DLLExport
 #endif
 
+#include <stdio.h>
 #include "../MQTTCommon/MQTTPacket.h"
-#include "stdio.h"
 #include "PlatformHeader.h"
 
 #if defined(MQTTCLIENT_PLATFORM_HEADER)
@@ -81,7 +81,7 @@ typedef struct MQTTMessage
     unsigned char dup;
     unsigned short id;
     void *payload;
-    int payloadlen;
+    size_t payloadlen;
 } MQTTMessage;
 
 typedef struct MessageData

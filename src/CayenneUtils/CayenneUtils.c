@@ -162,7 +162,7 @@ int buildSuffix(char* suffix, size_t length, const CayenneTopic topic, unsigned 
 * @param[in] topicNameLen CayenneTopic name length
 * return true if topic matches, false otherwise
 */
-int topicMatches(char* filter, char* topicName, unsigned int topicNameLen)
+int topicMatches(char* filter, char* topicName, size_t topicNameLen)
 {
 	char* curf = filter;
 	char* curn = topicName;
@@ -400,7 +400,7 @@ int CayenneBuildResponsePayload(char* payload, size_t* length, const char* id, c
 * @param[in] length Topic name string length
 * @return CAYENNE_SUCCESS if topic was parsed, error code otherwise
 */
-int CayenneParseTopic(CayenneTopic* topic, unsigned int* channel, const char** clientID, const char* username, char* topicName, unsigned int length) {
+int CayenneParseTopic(CayenneTopic* topic, unsigned int* channel, const char** clientID, const char* username, char* topicName, size_t length) {
 	char* index = NULL;
 	int i = 0;
 	TopicChannel parseTopics[PARSE_TOPICS_COUNT] = { { COMMAND_TOPIC, CAYENNE_ALL_CHANNELS },{ CONFIG_TOPIC, CAYENNE_ALL_CHANNELS },
