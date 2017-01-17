@@ -96,7 +96,7 @@ int connectClient(void)
 		if (finished)
 			return error;
 		printf("TCP connect failed, error: %d\n", error);
-		Sleep(2);
+		Sleep(2000);
 	}
 
 	if ((error = CayenneMQTTConnect(&mqttClient)) != MQTT_SUCCESS) {
@@ -142,7 +142,7 @@ void loop(void)
 			while (connectClient() != CAYENNE_SUCCESS) {
 				if (finished)
 					return;
-				Sleep(2);
+				Sleep(2000);
 				printf("Reconnect failed, retrying\n");
 			}
 		}

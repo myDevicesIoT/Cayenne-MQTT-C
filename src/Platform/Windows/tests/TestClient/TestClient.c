@@ -275,7 +275,7 @@ int connectClient(void)
 	while ((rc = NetworkConnect(&network, opts.host, opts.port)) != 0)
 	{
 		printf("TCP connect failed, rc: %d\n", rc);
-		Sleep(2);
+		Sleep(2000);
 	}
 
 	printf("MQTT connecting\n");
