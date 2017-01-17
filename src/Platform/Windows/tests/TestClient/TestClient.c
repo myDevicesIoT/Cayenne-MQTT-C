@@ -168,12 +168,12 @@ void checkMessage(CayenneMessageData* message)
 	for (i = 0; i < message->valueCount; ++i) {
 		if (((message->values[i].value != NULL) || (testMessage.values[i].value != NULL)) &&
 			(message->values[i].value && testMessage.values[i].value && (strcmp(message->values[i].value, testMessage.values[i].value) != 0))) {
-			printf(" val%d err: %s\n", i, testMessage.values[i].value ? testMessage.values[i].value : "NULL");
+			printf(" val%zu err: %s\n", i, testMessage.values[i].value ? testMessage.values[i].value : "NULL");
 			messageMatched = false;
 		}
 		if (((message->values[i].unit != NULL) || (testMessage.values[i].unit != NULL)) &&
 			(message->values[i].unit && testMessage.values[i].unit && (strcmp(message->values[i].unit, testMessage.values[i].unit) != 0))) {
-			printf(" unit%d err: %s\n", i, testMessage.values[i].unit ? testMessage.values[i].unit : "NULL");
+			printf(" unit%zu err: %s\n", i, testMessage.values[i].unit ? testMessage.values[i].unit : "NULL");
 			messageMatched = false;
 		}
 	}
@@ -633,7 +633,7 @@ int main(int argc, char** argv)
 	QueryPerformanceCounter(&after);
 	LARGE_INTEGER elapsed;
 	elapsed.QuadPart = (after.QuadPart - before.QuadPart) / countsPerMS.QuadPart;
-	printf("MQTT Test Finished, elapsed time %lld ms, failure count: %zd\n", elapsed.QuadPart, failureCount);
+	printf("MQTT Test Finished, elapsed time %lld ms, failure count: %zu\n", elapsed.QuadPart, failureCount);
 
 	return failureCount;
 }
