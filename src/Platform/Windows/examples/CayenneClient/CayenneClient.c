@@ -25,7 +25,6 @@ bool finished = false;
 */
 void outputMessage(CayenneMessageData* message)
 {
-	size_t i;
 	switch (message->topic) {
 	case COMMAND_TOPIC:
 		printf("topic=Command");
@@ -44,13 +43,11 @@ void outputMessage(CayenneMessageData* message)
 	if (message->type) {
 		printf(" type=%s", message->type);
 	}
-	for (i = 0; i < message->valueCount; ++i) {
-		if (message->values[i].value) {
-			printf(" value=%s", message->values[i].value);
-		}
-		if (message->values[i].unit) {
-			printf(" unit=%s", message->values[i].unit);
-		}
+	if (message->unit) {
+		printf(" unit=%s", message->unit);
+	}
+	if (message->value) {
+		printf(" value=%s", message->value);
 	}
 	if (message->id) {
 		printf(" id=%s", message->id);
@@ -77,7 +74,7 @@ void messageArrived(CayenneMessageData* message)
 
 		// Send the updated state for the channel so it is reflected in the Cayenne dashboard. If a command is successfully processed
 		// the updated state will usually just be the value received in the command message.
-		if ((error = CayenneMQTTPublishData(&mqttClient, message->clientID, DATA_TOPIC, message->channel, NULL, NULL, message->values[0].value)) != CAYENNE_SUCCESS) {
+		if ((error = CayenneMQTTPublishData(&mqttClient, message->clientID, DATA_TOPIC, message->channel, NULL, NULL, message->value)) != CAYENNE_SUCCESS) {
 			printf("Publish state failure, error: %d\n", error);
 		}
 	}
