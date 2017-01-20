@@ -596,6 +596,9 @@ int main(int argc, char** argv)
 	testPublishULong(DATA_TOPIC, 5, 5, TYPE_LUMINOSITY, UNIT_LUX, parseInfoPayload, NULL);
 	testPublishDouble(DATA_TOPIC, 6, 6.6, TYPE_BAROMETRIC_PRESSURE, UNIT_HECTOPASCAL, parseInfoPayload, NULL);
 	testPublishFloat(DATA_TOPIC, 7, 7.7, TYPE_RELATIVE_HUMIDITY, UNIT_PERCENT, parseInfoPayload, NULL);
+	char valueArray[50] = { 0 };
+	snprintf(valueArray, 50, "[%.5f,%.5f,%.1f]", 27.9878, 86.9250, 29029.0);
+	testPublish(DATA_TOPIC, 8, valueArray, TYPE_GPS, UNIT_METER, parseInfoPayload, NULL);
 	testPublish(SYS_MODEL_TOPIC, CAYENNE_NO_CHANNEL, "Model", NULL, NULL, parseInfoPayload, NULL);
 	testPublish(SYS_VERSION_TOPIC, CAYENNE_NO_CHANNEL, "1.0.0", NULL, NULL, parseInfoPayload, NULL);
 	testPublish(COMMAND_TOPIC, 0, NULL, "1", "respond with error", true, NULL);
