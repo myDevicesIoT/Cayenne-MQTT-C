@@ -19,7 +19,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #define PLATFORMHEADER_H_
 
 //Set the platform specific header file containing the Network and Timer definitions here.
-#if defined(__linux__)
+#if defined(__linux__) || defined(__FreeBSD__)
 	#include "MQTTLinux.h"
 #endif
 
