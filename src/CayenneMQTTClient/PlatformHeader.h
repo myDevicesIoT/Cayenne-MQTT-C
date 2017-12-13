@@ -21,9 +21,6 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 //Set the platform specific header file containing the Network and Timer definitions here.
 #if defined(__linux__)
 	#include "MQTTLinux.h"
-#elif defined(_WIN32)
-	#include "MQTTWindows.h"
-	#define MAX_MESSAGE_HANDLERS 1  // Set MQTTClient handlers to 1 since Visual Studio doesn't allow zero length arrays.
 #endif
 
 // The following Network and Timer code should be defined in the platform specific header.
@@ -96,8 +93,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 // */
 // int TimerLeftMS(Timer* timer);
 
-#ifndef MAX_MESSAGE_HANDLERS
+
 #define MAX_MESSAGE_HANDLERS 0  // Set MQTTClient handlers to 0 since Cayenne uses its own handlers.
-#endif
 
 #endif /* PLATFORMHEADER_H_ */
