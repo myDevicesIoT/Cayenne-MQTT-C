@@ -6,16 +6,13 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-#include <unistd.h>
-#include <signal.h>
-#include <stdlib.h>
 #include "CayenneMQTTClient.h"
-#include "MQTTLinux.h"
+#include "MQTTWindows.h"
 
 // Cayenne authentication info. This should be obtained from the Cayenne Dashboard.
 char* username = "MQTT_USERNAME";
 char* password = "MQTT_PASSWORD";
-char* clientID = "CLIENT_ID";
+char* clientID = "WIN_CLIENT_ID";
 
 Network network;
 CayenneMQTTClient mqttClient;
@@ -28,7 +25,7 @@ bool finished = false;
 */
 void outputMessage(CayenneMessageData* message)
 {
-	switch (message->topic)	{
+	switch (message->topic) {
 	case COMMAND_TOPIC:
 		printf("topic=Command");
 		break;
@@ -93,7 +90,7 @@ int connectClient(void)
 		if (finished)
 			return error;
 		printf("TCP connect failed, error: %d\n", error);
-		sleep(2);
+		Sleep(2000);
 	}
 
 	if ((error = CayenneMQTTConnect(&mqttClient)) != MQTT_SUCCESS) {
@@ -109,7 +106,7 @@ int connectClient(void)
 
 	// Send device info. Here we just send some example values for the system info. These should be changed to use actual system data, or removed if not needed.
 	CayenneMQTTPublishData(&mqttClient, NULL, SYS_VERSION_TOPIC, CAYENNE_NO_CHANNEL, NULL, NULL, CAYENNE_VERSION);
-	CayenneMQTTPublishData(&mqttClient, NULL, SYS_MODEL_TOPIC, CAYENNE_NO_CHANNEL, NULL, NULL, "Linux");
+	CayenneMQTTPublishData(&mqttClient, NULL, SYS_MODEL_TOPIC, CAYENNE_NO_CHANNEL, NULL, NULL, "Windows");
 
 	return CAYENNE_SUCCESS;
 }
@@ -136,7 +133,7 @@ void loop(void)
 			while (connectClient() != CAYENNE_SUCCESS) {
 				if (finished)
 					return;
-				sleep(2);
+				Sleep(2000);
 				printf("Reconnect failed, retrying\n");
 			}
 		}
@@ -160,10 +157,18 @@ void loop(void)
 }
 
 /**
-* Interrupt handler for processing program shutdown.
+* Control signal handler for processing program shutdown.
+* @param[in] dwCtrlType The type of control signal received by the handler.
+* @return TRUE if the control signal was handled.
 */
-void intHandler(int signum) {
-	finished = true;
+BOOL WINAPI HandlerRoutine(DWORD dwCtrlType)
+{
+	BOOL handled = FALSE;
+	if (dwCtrlType == CTRL_C_EVENT) {
+		finished = true;
+		handled = TRUE;
+	}
+	return handled;
 }
 
 /**
@@ -174,13 +179,7 @@ void intHandler(int signum) {
 int main(int argc, char** argv)
 {
 	// Set up handler so we can exit cleanly when Ctrl-C is pressed.
-	struct sigaction action;
-	memset(&action, 0, sizeof(struct sigaction));
-	action.sa_handler = intHandler;
-	sigaction(SIGINT, &action, NULL);
-	// Ignore the SIGPIPE signal since the program will attempt to reconnect if there are socket errors.
-	action.sa_handler = SIG_IGN;
-	sigaction(SIGPIPE, &action, NULL);
+	SetConsoleCtrlHandler(HandlerRoutine, TRUE);
 
 	// Initialize the network.
 	NetworkInit(&network);
@@ -198,12 +197,15 @@ int main(int argc, char** argv)
 	}
 
 	// Disconnect from Cayenne.
-	if(CayenneMQTTConnected(&mqttClient))
+	if (CayenneMQTTConnected(&mqttClient))
 		CayenneMQTTDisconnect(&mqttClient);
 
 	// Disconnect network client.
-	if(NetworkConnected(&network))
+	if (NetworkConnected(&network))
 		NetworkDisconnect(&network);
+
+	// Cleanup the network.
+	NetworkCleanup();
 
 	return 0;
 }

@@ -9,7 +9,7 @@
 // Cayenne authentication info. This should be obtained from the Cayenne Dashboard.
 char* username = "MQTT_USERNAME";
 char* password = "MQTT_PASSWORD";
-char* clientID = "CLIENT_ID";
+char* clientID = "WIN_CLIENT_ID";
 
 Network network;
 CayenneMQTTClient mqttClient;
@@ -19,7 +19,7 @@ CayenneMQTTClient mqttClient;
 void messageArrived(CayenneMessageData* message)
 {
 	printf("Message received on channel %d\n", message->channel);
-	
+
 	// Add code to process the message here.
 	if (message->topic == COMMAND_TOPIC) {
 		// If this is a command message we publish a response to show we recieved it. Here we are just sending a default 'OK' response.
