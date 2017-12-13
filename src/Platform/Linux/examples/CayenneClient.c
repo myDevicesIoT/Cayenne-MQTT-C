@@ -14,7 +14,7 @@
 
 // Cayenne authentication info. This should be obtained from the Cayenne Dashboard.
 char* username = "MQTT_USERNAME";
-char* password = "MQTT_PASSWORD";
+char* password = "MQTT_PASSWORD"; 
 char* clientID = "CLIENT_ID";
 
 Network network;
@@ -28,9 +28,13 @@ bool finished = false;
 */
 void outputMessage(CayenneMessageData* message)
 {
+	int i;
 	switch (message->topic)	{
 	case COMMAND_TOPIC:
 		printf("topic=Command");
+		break;
+	case CONFIG_TOPIC:
+		printf("topic=Config");
 		break;
 	default:
 		printf("topic=%d", message->topic);
@@ -43,11 +47,13 @@ void outputMessage(CayenneMessageData* message)
 	if (message->type) {
 		printf(" type=%s", message->type);
 	}
-	if (message->unit) {
-		printf(" unit=%s", message->unit);
-	}
-	if (message->value) {
-		printf(" value=%s", message->value);
+	for (i = 0; i < message->valueCount; ++i) {
+		if (message->values[i].value) {
+			printf(" value=%s", message->values[i].value);
+		}
+		if (message->values[i].unit) {
+			printf(" unit=%s", message->values[i].unit);
+		}
 	}
 	if (message->id) {
 		printf(" id=%s", message->id);
@@ -74,7 +80,7 @@ void messageArrived(CayenneMessageData* message)
 
 		// Send the updated state for the channel so it is reflected in the Cayenne dashboard. If a command is successfully processed
 		// the updated state will usually just be the value received in the command message.
-		if ((error = CayenneMQTTPublishData(&mqttClient, message->clientID, DATA_TOPIC, message->channel, NULL, NULL, message->value)) != CAYENNE_SUCCESS) {
+		if ((error = CayenneMQTTPublishData(&mqttClient, message->clientID, DATA_TOPIC, message->channel, NULL, NULL, message->values[0].value)) != CAYENNE_SUCCESS) {
 			printf("Publish state failure, error: %d\n", error);
 		}
 	}
@@ -102,14 +108,19 @@ int connectClient(void)
 	}
 	printf("Connected\n");
 
-	// Subscribe to the Command topic.
+	// Subscribe to required topics.
 	if ((error = CayenneMQTTSubscribe(&mqttClient, NULL, COMMAND_TOPIC, CAYENNE_ALL_CHANNELS, NULL)) != CAYENNE_SUCCESS) {
 		printf("Subscription to Command topic failed, error: %d\n", error);
+	}
+	if ((error = CayenneMQTTSubscribe(&mqttClient, NULL, CONFIG_TOPIC, CAYENNE_ALL_CHANNELS, NULL)) != CAYENNE_SUCCESS) {
+		printf("Subscription to Config topic failed, error:%d\n", error);
 	}
 
 	// Send device info. Here we just send some example values for the system info. These should be changed to use actual system data, or removed if not needed.
 	CayenneMQTTPublishData(&mqttClient, NULL, SYS_VERSION_TOPIC, CAYENNE_NO_CHANNEL, NULL, NULL, CAYENNE_VERSION);
 	CayenneMQTTPublishData(&mqttClient, NULL, SYS_MODEL_TOPIC, CAYENNE_NO_CHANNEL, NULL, NULL, "Linux");
+	CayenneMQTTPublishData(&mqttClient, NULL, SYS_CPU_MODEL_TOPIC, CAYENNE_NO_CHANNEL, NULL, NULL, "CPU Model");
+	CayenneMQTTPublishData(&mqttClient, NULL, SYS_CPU_SPEED_TOPIC, CAYENNE_NO_CHANNEL, NULL, NULL, "1000000000");
 
 	return CAYENNE_SUCCESS;
 }
