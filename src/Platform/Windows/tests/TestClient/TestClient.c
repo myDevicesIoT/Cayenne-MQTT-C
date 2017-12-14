@@ -7,8 +7,8 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-#include <unistd.h>
-#include "MQTTLinux.h"
+#include <stdlib.h>
+#include "MQTTWindows.h"
 #include "CayenneMQTTClient.h"
 
 bool checkMessages = false;
@@ -158,7 +158,7 @@ void checkMessage(CayenneMessageData* message)
 		messageMatched = false;
 	}
 	if (((message->value != NULL) || (testMessage.value != NULL)) && (message->value && testMessage.value && strcmp(message->value, testMessage.value) != 0)) {
-		printf(" value err: %s\n", testMessage.value ? testMessage.value : "NULL");
+		printf(" type err: %s\n", testMessage.value ? testMessage.value : "NULL");
 		messageMatched = false;
 	}
 	if (((message->id != NULL) || (testMessage.id != NULL)) && (message->id && testMessage.id && strcmp(message->id, testMessage.id) != 0)) {
@@ -263,7 +263,7 @@ int connectClient(void)
 	while ((rc = NetworkConnect(&network, opts.host, opts.port)) != 0)
 	{
 		printf("TCP connect failed, rc: %d\n", rc);
-		sleep(2);
+		Sleep(2000);
 	}
 
 	printf("MQTT connecting\n");
@@ -568,8 +568,8 @@ int main(int argc, char** argv)
 	bool parseInfoPayload = false;
 #endif
 
-	struct timeval before, after, elapsed;
-	gettimeofday(&before, NULL);
+	LARGE_INTEGER before;
+	QueryPerformanceCounter(&before);
 
 	getOptions(argc, argv);
 
@@ -595,7 +595,7 @@ int main(int argc, char** argv)
 	testPublishLong(DATA_TOPIC, 4, -4, TYPE_PROXIMITY, UNIT_CENTIMETER, parseInfoPayload, NULL);
 	testPublishULong(DATA_TOPIC, 5, 5, TYPE_LUMINOSITY, UNIT_LUX, parseInfoPayload, NULL);
 	testPublishDouble(DATA_TOPIC, 6, 6.6, TYPE_BAROMETRIC_PRESSURE, UNIT_HECTOPASCAL, parseInfoPayload, NULL);
-	testPublishFloat(DATA_TOPIC, 7, 7.7, TYPE_RELATIVE_HUMIDITY, UNIT_PERCENT, parseInfoPayload, NULL);
+	testPublishFloat(DATA_TOPIC, 7, (float)7.7, TYPE_RELATIVE_HUMIDITY, UNIT_PERCENT, parseInfoPayload, NULL);
 	char valueArray[50] = { 0 };
 	snprintf(valueArray, 50, "[%.5f,%.5f,%.1f]", 27.9878, 86.9250, 29029.0);
 	testPublish(DATA_TOPIC, 8, valueArray, TYPE_GPS, UNIT_METER, parseInfoPayload, NULL);
@@ -616,9 +616,14 @@ int main(int argc, char** argv)
 	if (NetworkConnected(&network))
 		NetworkDisconnect(&network);
 
-	gettimeofday(&after, NULL);
-	timersub(&after, &before, &elapsed);
-	printf("MQTT Test Finished, elapsed time %ld ms, failure count: %d\n", (elapsed.tv_sec < 0) ? 0 : elapsed.tv_sec * 1000 + elapsed.tv_usec / 1000, failureCount);
+	LARGE_INTEGER countsPerMS;
+	QueryPerformanceFrequency(&countsPerMS);
+	countsPerMS.QuadPart /= 1000;
+	LARGE_INTEGER after;
+	QueryPerformanceCounter(&after);
+	LARGE_INTEGER elapsed;
+	elapsed.QuadPart = (after.QuadPart - before.QuadPart) / countsPerMS.QuadPart;
+	printf("MQTT Test Finished, elapsed time %lld ms, failure count: %zu\n", elapsed.QuadPart, failureCount);
 
 	return failureCount;
 }
