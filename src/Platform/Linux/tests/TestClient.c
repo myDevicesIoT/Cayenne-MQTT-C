@@ -162,7 +162,7 @@ void checkMessage(CayenneMessageData* message)
 		messageMatched = false;
 	}
 	if (message->valueCount != testMessage.valueCount) {
-		printf(" valCount err: %u\n", testMessage.valueCount);
+		printf(" valCount err: %zu\n", testMessage.valueCount);
 		messageMatched = false;
 	}
 	for (i = 0; i < message->valueCount; ++i) {
@@ -239,8 +239,7 @@ void subscribe(CayenneTopic topic, unsigned int channel, CayenneMessageHandler h
 	int rc = CayenneMQTTSubscribe(&mqttClient, clientID ? clientID : mqttClient.clientID, topic, channel, handler);
 	char buffer[CAYENNE_MAX_MESSAGE_SIZE] = { 0 };
 	CayenneBuildTopic(buffer, sizeof(buffer), mqttClient.username, clientID ? clientID : mqttClient.clientID, topic, channel);
-	printf(buffer);
-	printf(", rc: %d\n", rc);
+	printf("%s, rc: %d\n", buffer, rc);
 	if (rc != CAYENNE_SUCCESS)
 		failureCount++;
 }
@@ -257,8 +256,7 @@ void unsubscribe(CayenneTopic topic, unsigned int channel, const char* clientID)
 	int rc = CayenneMQTTUnsubscribe(&mqttClient, clientID ? clientID : mqttClient.clientID, topic, channel);
 	char buffer[CAYENNE_MAX_MESSAGE_SIZE] = { 0 };
 	CayenneBuildTopic(buffer, sizeof(buffer), mqttClient.username, clientID ? clientID : mqttClient.clientID, topic, channel);
-	printf(buffer);
-	printf(", rc: %d\n", rc);
+	printf("%s, rc: %d\n", buffer, rc);
 	if (rc != CAYENNE_SUCCESS)
 		failureCount++;
 }
@@ -628,7 +626,7 @@ int main(int argc, char** argv)
 
 	gettimeofday(&after, NULL);
 	timersub(&after, &before, &elapsed);
-	printf("MQTT Test Finished, elapsed time %ld ms, failure count: %d\n", (elapsed.tv_sec < 0) ? 0 : elapsed.tv_sec * 1000 + elapsed.tv_usec / 1000, failureCount);
+	printf("MQTT Test Finished, elapsed time %ld ms, failure count: %zu\n", (elapsed.tv_sec < 0) ? 0 : elapsed.tv_sec * 1000 + elapsed.tv_usec / 1000, failureCount);
 
 	return failureCount;
 }
