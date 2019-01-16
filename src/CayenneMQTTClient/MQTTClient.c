@@ -462,12 +462,13 @@ int MQTTConnect(MQTTClient* c, MQTTPacket_connectData* options)
         goto exit;
     if ((rc = sendPacket(c, len, &connect_timer)) != MQTT_SUCCESS)  // send the connect packet
         goto exit; // there was a problem
-    
-	if (c->keepAliveInterval > 0) {
-		TimerCountdown(&c->last_received_timer, c->keepAliveInterval);
-	}
-	
-	// this will be a blocking call, wait for the connack
+
+    if (c->keepAliveInterval > 0)
+    {
+        TimerCountdown(&c->last_received_timer, c->keepAliveInterval);
+    }
+
+    // this will be a blocking call, wait for the connack
     if (waitfor(c, CONNACK_MSG, &connect_timer) == CONNACK_MSG)
     {
         unsigned char connack_rc = 255;
