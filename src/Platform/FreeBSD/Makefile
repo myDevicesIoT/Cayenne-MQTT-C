@@ -1,10 +1,10 @@
 .include <Makefile.inc>
 
 SUBDIR= \
-	cayenneclient	\
-	simplepub	\
-	simplesub	\
-	testclient	\
+	cayenne_client \
+	simple_publish \
+	simple_subscribe \
+	test_client \
 
 beforebuild:
 	mkdir -p ${.CURDIR}/build
