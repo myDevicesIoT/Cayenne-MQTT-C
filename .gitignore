@@ -2,7 +2,9 @@
 build/
 
 # Windows files and folders
+.vs/
 *.suo
 x64
 Debug
 Release
+*.vcxproj.user
