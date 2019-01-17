@@ -18,7 +18,7 @@ To build on Linux switch to the root folder and run: `make`
 
 To build on FreeBSD switch to the `src\Platform\FreeBSD` folder and run: `make`
 
-To build on Windows load the the Visual Studio 2017 solution file at `src\Platform\Windows\Cayenne.sln` and build the project.
+To build on Windows load the Visual Studio 2017 solution file at `src\Platform\Windows\Cayenne.sln` and build the project.
 
 ## Adding Additional Platforms
 The Cayenne MQTT client code is platform independent but it requires platform specific code to create timers and to read and write data over the network. To add support for additional platforms you will need to create platform specific timer and networking code.
