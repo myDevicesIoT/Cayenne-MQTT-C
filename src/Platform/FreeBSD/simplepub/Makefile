@@ -1,6 +1,6 @@
 .include <../Makefile.inc>
 
-TOPDIR=	${.CURDIR}/../..
+TOPDIR=	${.CURDIR}/../../../..
 SRCS=	${BASE_SRCS} SimplePublish.c
 PROG=	simplepub
 
