@@ -1,7 +1,7 @@
 SRC_DIR=${TOPDIR}/src
-PLATFORM_DIR=$(SRC_DIR)/Platform/Linux
-EXAMPLES_DIR=$(PLATFORM_DIR)/examples
-TESTS_DIR=$(PLATFORM_DIR)/tests
+LINUX_DIR=$(SRC_DIR)/Platform/Linux
+EXAMPLES_DIR=$(LINUX_DIR)/examples
+TESTS_DIR=$(LINUX_DIR)/tests
 
 CFLAGS=	\
     -DLINUX_SO \
@@ -13,16 +13,16 @@ CFLAGS=	\
     -I$(SRC_DIR)/CayenneMQTTClient \
     -I$(SRC_DIR)/MQTTCommon \
     -I$(MBEDTLS_DIR)/include \
-    -I$(PLATFORM_DIR)
+    -I$(LINUX_DIR)
 
-.OBJDIR: ${TOPDIR}/bsd/build
+.OBJDIR: $(SRC_DIR)/Platform/FreeBSD/build
 
 .PATH: $(SRC_DIR)/CayenneMQTTClient
 .PATH: $(SRC_DIR)/CayenneUtils
 .PATH: $(SRC_DIR)/MQTTCommon
 .PATH: $(EXAMPLES_DIR)
 .PATH: $(TESTS_DIR)
-.PATH: $(PLATFORM_DIR)
+.PATH: $(LINUX_DIR)
 
 MK_MAN=no
 
